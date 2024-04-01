@@ -2,9 +2,11 @@
 import { cn } from "@/utils/cn";
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import {inter, kanit, kanit_bold, montserrat, rowdies} from "@/fonts";
+import { kanit_bold } from "@/fonts";
+import Link from "next/link"
 export const ImagesSlider = ({
                                  images,
+
                                  children,
                                  overlay = true,
                                  overlayClassName,
@@ -149,7 +151,7 @@ export const ImagesSlider = ({
         </div>
     );
 };
-export const ImageSlider = ({images}:{images:Array<string>})=>{
+export const ImageSlider = ({images, cta, general}:{images:Array<string>, cta:any, general:any})=>{
     return (
         <ImagesSlider className="h-[80vh]" images={images}>
             <motion.div
@@ -167,12 +169,14 @@ export const ImageSlider = ({images}:{images:Array<string>})=>{
                 className="z-50 flex flex-col justify-center items-center"
             >
                 <motion.p className={`${kanit_bold.className} font-bold text-5xl md:text-6xl text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 py-4`}>
-                    The official <span className="text-primary">Ikeja</span> <br /> football club website
+                    The official <span className="text-primary">{general.title}</span> <br /> football club website
                 </motion.p>
+                <Link href={cta.link}>
                 <button className="px-4 py-2 backdrop-blur-sm text-md border bg-white/10 border-primary text-white mx-auto text-center rounded-full relative mt-4">
-                    <span>Latest News →</span>
+                   <span>{cta?.title} →</span>
                     <div className="absolute inset-x-0  h-px -bottom-px bg-gradient-to-r w-3/4 mx-auto from-transparent via-primary to-transparent" />
                 </button>
+                    </Link>
             </motion.div>
         </ImagesSlider>
     )

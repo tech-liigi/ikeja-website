@@ -5,8 +5,10 @@ import Footer from "./Footer"
 import Player from "./Player"
 import Social from "./Social"
 import Loader from "./Loader"
-import {TracingBeam} from "./TracingBeam"
+import VideoMark from "./videoMark"
+import RichText from "./RichText"
 import {ImageSlider} from "./ImageSlider"
+import {TracingBeam} from "./TracingBeam"
 export  {
     Header,
     Carousel,
@@ -16,5 +18,7 @@ export  {
     Social,
     Loader,
     TracingBeam,
+    VideoMark,
+    RichText,
     ImageSlider
 }

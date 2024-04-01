@@ -1,5 +1,15 @@
 import type { Metadata, ResolvingMetadata  } from "next";
 import { Roboto } from "next/font/google";
+import { notFound } from 'next/navigation';
+import {
+    generalResponse,
+    generalQuery,
+    articleQuery,
+    News
+} from "@/lib/queries";
+import {urlForImage} from "@/lib/utils"
+import {sanityFetch} from "@/lib/fetch";
+
 const roboto = Roboto({ subsets: ["latin"], weight: "400" });
 type Props = {
     params: { category: string, title:string }
@@ -9,19 +19,29 @@ export async function generateMetadata(
     parent: ResolvingMetadata
 ): Promise<Metadata> {
     // read route params
-    const category = params.category;
-    const title = params.title;
+    const category = params?.category;
+    const title = params?.title;
+
+    const [general, article] = await Promise.all([
+        sanityFetch<generalResponse>({
+            query: generalQuery,
+        }),
+        sanityFetch<News>({
+            query: articleQuery,
+            params:{title}
+        }),
+    ]);
 
     return {
-        title: `Ikeja News & ${category.charAt(0).toUpperCase() + category.slice(1, category.length)} & ${title}`,
-        description: "For all the latest Ikeja news, visit the official website of the Ikeja.",
+        title: `${general.title} News & ${category.charAt(0).toUpperCase() + category.slice(1, category.length)} & ${title}`,
+        description: `For all the latest ${general.title} news, visit the official website of the ${general.title}.`,
         icons: {
-            icon: "/Ikeja_FC_Logo.png"
+            icon: article?.preview && urlForImage(article.preview)?.url() || general.logo && urlForImage(general.logo )?.url()
         },
         openGraph: {
-            title: `Ikeja News & ${category.charAt(0).toUpperCase() + category.slice(1, category.length)} & ${title}`,
-            description: "For all the latest Ikeja news, visit the official website of the Ikeja.",
-                    images:["/Ikeja_FC_Logo.png"]
+            title: `${general.title} News & ${category.charAt(0).toUpperCase() + category.slice(1, category.length)} & ${title}`,
+            description: `For all the latest ${general.title} news, visit the official website of the ${general.title}.`,
+            images: article?.preview && [`${urlForImage(article.preview)?.url()}`] || general.logo && [`${urlForImage(general.logo)?.url()}`]
         },
     }
 }
