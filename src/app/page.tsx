@@ -88,6 +88,7 @@ export default async function Home() {
         }),
     ]);
 const home = nav.pages.find(p => p.id === 'home');
+// @ts-ignore
 const images = (banner.images || []).map(image => image ? urlForImage(image).url() : "");
   return (
       <>
